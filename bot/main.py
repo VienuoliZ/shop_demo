@@ -1,5 +1,7 @@
 import requests
 from config import token
+
+# -*- coding: utf-8 -*-
 url = 'https://api.telegram.org/bot'
 defaut_message = 'Я бот, который покажет вам стоимоть Bitcoin и Ethereum в Euro \n\nKоманды:\n /btc - цена за Bitcoin\n /eth - цена за Ethereum'
 
@@ -17,7 +19,7 @@ def get_bot_updates(limit, offset):
     decoded = result.json()
     return decoded['result']
 
-def sendMessage(chat_id, text):
+def send_message(chat_id, text):
     method_url = url + token + '/sendMessage'
     par = {'chat_id': chat_id, 'text': text}
     requests.post(method_url, params=par)
@@ -32,19 +34,19 @@ def get_crypto_rates(currency):
     result = decoded['ticker']
     return result['price']
 
-def listenBot(offset):
+def listen_bot(offset):
     result = get_bot_updates(5, offset)
     chat_id = item['message']['chat']['id']
     text = item['message']['text']
     if text == '/start':
         text = defaut_message
-        sendMessage(chat_id, text)
+        send_message(chat_id, text)
     elif text == '/btc':
         text = '1 биткойн стоит ' + get_crypto_rates('btc') + ' Eur.'
-        sendMessage(chat_id, text)
+        send_message(chat_id, text)
     elif text == '/eth':
         text = '1 эфириум стоит ' + get_crypto_rates('etc') + ' Eur.'
-        sendMessage(chat_id, text)
+        send_message(chat_id, text)
 
 while True:
     result = get_bot_updates(5, 0)
@@ -52,5 +54,5 @@ while True:
         text = item['message']['text']
         update_id = item['update_id']
         new_offset = update_id + 1
-        listenBot(new_offset)
+        listen_bot(new_offset)
         break
