@@ -1,5 +1,6 @@
 import requests
 from config import token
+
 url = 'https://api.telegram.org/bot'
 defaut_message = 'Я бот, который покажет вам стоимоть Bitcoin и Ethereum в Euro \n\nKоманды:\n /btc - цена за Bitcoin\n /eth - цена за Ethereum'
 
